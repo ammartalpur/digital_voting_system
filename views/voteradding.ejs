@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Input Form</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Body styling */
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .form-container {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 3rem;
+        width: 800px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .form-container::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 200px;
+        height: 200px;
+        background: rgba(242, 255, 0, 0.1);
+        border-radius: 50%;
+        z-index: 0;
+      }
+
+      .form-container::after {
+        content: "";
+        position: absolute;
+        bottom: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: rgba(242, 255, 0, 0.1);
+        border-radius: 50%;
+        z-index: 0;
+      }
+      .form-heading {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        z-index: 1;
+        position: relative;
+      }
+      .form-container input {
+        width: 95%;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        color: #000;
+        z-index: 1;
+        position: relative;
+      }
+
+      .form-container input[type="file"] {
+        cursor: pointer;
+      }
+
+      .form-container .submit-button {
+        background: #ffcc00;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        padding: 0.7rem 2rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        z-index: 1;
+        position: relative;
+      }
+
+      .form-container .submit-button:hover {
+        background-color: #183642;
+        color: white;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h1 class="form-heading">Voter Identity</h1>
+      <form action="/addvoter" method="post" enctype="multipart/form-data">
+        <input
+          id="faceid"
+          name="faceid"
+          type="text"
+          placeholder="Enter Roll Number"
+          required
+        />
+        <input id="face-image-input" type="file" name="faceimage" required />
+        <button type="submit" class="submit-button">Add Another</button>
+      </form>
+      <a href="/choose">
+        <button class="submit-button">Done</button>
+      </a>
+    </div>
+    <script src="/face-api.min.js"></script>
+    <script>
+      // Load models
+      async function loadModels() {
+        try {
+          console.log("Loading models...");
+          await faceapi.nets.tinyFaceDetector.loadFromUri("./models");
+          await faceapi.nets.faceLandmark68Net.loadFromUri("./models");
+          await faceapi.nets.faceRecognitionNet.loadFromUri("./models");
+          await faceapi.nets.ssdMobilenetv1.loadFromUri("./models");
+          console.log("Models loaded successfully.");
+          status.textContent = "Models loaded!";
+        } catch (error) {
+          console.error("Error loading models:", error);
+          status.textContent = "Error loading models.";
+        }
+      }
+      // Function to save face descriptor from input image
+      async function saveFaceDescriptorFromInput() {
+        const faceId = document.getElementById("faceid").value;
+        const imageInput = document.getElementById("face-image-input");
+
+        if (!imageInput.files || imageInput.files.length === 0) {
+          alert("Face image is required!");
+          return;
+        }
+
+        const image = await faceapi.bufferToImage(imageInput.files[0]);
+        const detections = await faceapi
+          .detectSingleFace(image)
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+
+        if (!detections) {
+          alert("No face detected in the image!");
+          return;
+        }
+
+        const faceDescriptor = detections.descriptor;
+        const faceDescriptorString = JSON.stringify(faceDescriptor);
+
+        // Submit the form with faceId and faceDescriptor
+        const formData = new FormData();
+        formData.append("faceid", faceId);
+        formData.append("facedescriptor", faceDescriptorString);
+
+        fetch("/addvoter", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            showFaceID(faceId);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      function showFaceID(faceID) {
+        alert(`FaceID: ${faceID} added successfully!`);
+      }
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          saveFaceDescriptorFromInput();
+        });
+
+      (async function initialize() {
+        await loadModels();
+      })();
+    </script>
+  </body>
+</html>

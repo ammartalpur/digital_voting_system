@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candidate Adding</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(120deg, #2c5364, #203a43, #0f2027);
+      }
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 1000px;
+      }
+
+      .admin-panel {
+        background-color: #ffffff;
+        padding: 4rem;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        margin-bottom: 2rem; /* Spacing between the panel and the table */
+      }
+
+      .admin-panel h1 {
+        font-size: 3rem;
+        color: #333;
+        margin-bottom: 2rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.2rem;
+        text-align: left;
+      }
+
+      .form-group label {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.3rem;
+        display: block;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+        transition: border 0.3s;
+      }
+
+      .form-group input:focus {
+        border-color: #4d79ff;
+      }
+
+      .add,
+      .reset,
+      .finish {
+        display: inline-block;
+        font-size: 1.3rem;
+        font-weight: bold;
+        background: #ffcc00;
+        color: #000;
+        text-decoration: none;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 6px;
+        transition: 0.5s;
+        margin-top: 2rem;
+        cursor: pointer;
+      }
+
+      .add:hover,
+      .reset:hover,
+      .finish:hover {
+        background: #f6ff00;
+        transform: translateY(-5px);
+      }
+
+      .finish {
+        margin-left: 30px;
+      }
+
+      #candidateTable {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      #candidateTable thead {
+        background-color: #4d79ff;
+        color: #fff;
+        text-align: left;
+      }
+
+      #candidateTable th,
+      #candidateTable td {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 1rem;
+      }
+
+      #candidateTable tbody tr:nth-child(odd) {
+        background-color: #f4f4f4;
+      }
+
+      #candidateTable tbody tr:nth-child(even) {
+        background-color: #fff;
+      }
+
+      #candidateTable tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      #candidateTable td button {
+        background-color: #ff6b6b;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      #candidateTable td button:hover {
+        background-color: #ff0000;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="admin-panel">
+        <h1>Add Candidates</h1>
+        <form action="/addcandidate" method="post">
+          <div class="form-group">
+            <label for="candidateName">
+              <h3>Candidate Name:</h3>
+            </label>
+            <input
+              name="candidateName"
+              type="text"
+              id="candidateName"
+              placeholder="Enter candidate name"
+              required
+            />
+          </div>
+          <button class="finish" type="submit" class="add">Add Another</button>
+        </form>
+        <a href="/doneadding.html" class="finish">Finish</a>
+        <form action="/resetcandidateid" method="post" style="display: inline">
+          <button type="submit" class="finish">Reset</button>
+        </form>
+      </div>
+
+      <table id="candidateTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% candidates.forEach(candidate=> { %>
+          <tr>
+            <td><%= candidate.id %></td>
+            <td><%= candidate.name %></td>
+            <td>
+              <form
+                action="/deletecandidate"
+                method="POST"
+                style="display: inline"
+              >
+                <input
+                  type="hidden"
+                  name="candidateId"
+                  value="<%= candidate.id %>"
+                />
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

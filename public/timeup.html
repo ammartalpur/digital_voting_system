@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+        font-family: "Roboto", sans-serif;
+        color: white;
+      }
+      #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        top: 0;
+        left: 0;
+      }
+      .overlay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .content {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 40px 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      .main-text {
+        font-size: 4rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #ffffff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .sub-text {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        color: #dcdcdc;
+      }
+      .button {
+        background: #ffcc00;
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(255, 204, 0, 0.5),
+          0 2px 4px rgba(255, 204, 0, 0.3);
+        transition: box-shadow 0.3s ease;
+      }
+
+      .button:hover {
+        box-shadow: 0 0 15px 5px rgba(255, 204, 0, 0.6);
+      }
+
+      .button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 15px rgba(255, 204, 0, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="particles-js"></div>
+    <div class="overlay">
+      <div class="content">
+        <h1 class="main-text">⏳ Time is Over</h1>
+        <p class="sub-text">Sorry, you can't vote now.</p>
+        <a href="userroll">
+          <button class="button">Next</button>
+        </a>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="cpp/particles.js"></script>
+    <script>
+      // Initialize the WebAssembly module
+      createModule()
+        .then((Module) => {
+          if (Module.getParticleConfig) {
+            const config = Module.getParticleConfig();
+
+            // Convert the config to the format expected by particles.js
+            const particlesConfig = {
+              particles: {
+                number: {
+                  value: config.number_value,
+                  density: {
+                    enable: config.density_enable,
+                    value_area: config.density_value_area,
+                  },
+                },
+                color: { value: config.color_value },
+                shape: { type: config.shape_type },
+                opacity: {
+                  value: config.opacity_value,
+                  anim: {
+                    enable: config.opacity_anim_enable,
+                    speed: config.opacity_anim_speed,
+                    opacity_min: config.opacity_anim_opacity_min,
+                    sync: config.opacity_anim_sync,
+                  },
+                },
+                size: {
+                  value: config.size_value,
+                  random: config.size_random,
+                  anim: {
+                    enable: config.size_anim_enable,
+                    speed: config.size_anim_speed,
+                    size_min: config.size_anim_size_min,
+                    sync: config.size_anim_sync,
+                  },
+                },
+                line_linked: {
+                  enable: config.line_linked_enable,
+                  distance: config.line_linked_distance,
+                  color: config.line_linked_color,
+                  opacity: config.line_linked_opacity,
+                  width: config.line_linked_width,
+                },
+                move: {
+                  enable: config.move_enable,
+                  speed: config.move_speed,
+                  direction: config.move_direction,
+                  out_mode: config.move_out_mode,
+                  bounce: config.move_bounce,
+                },
+              },
+              interactivity: {
+                events: {
+                  onhover: {
+                    enable: config.interactivity_onhover_enable,
+                    mode: config.interactivity_onhover_mode,
+                  },
+                  onclick: {
+                    enable: config.interactivity_onclick_enable,
+                    mode: config.interactivity_onclick_mode,
+                  },
+                },
+              },
+              retina_detect: config.retina_detect,
+            };
+
+            // Initialize particles.js with the configuration
+            particlesJS("particles-js", particlesConfig);
+          } else {
+            console.error(
+              "getParticleConfig function not found in the WebAssembly module."
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error initializing the WebAssembly module:", error);
+        });
+    </script>
+  </body>
+</html>

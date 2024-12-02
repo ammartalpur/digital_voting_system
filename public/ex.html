@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voter Data Manager</title>
+</head>
+
+<body>
+  <h1>Voter Data Manager</h1>
+
+  <form id="saveForm">
+    <h2>Save Voter Data</h2>
+    <label for="voterId">Voter ID:</label>
+    <input type="text" id="voterId" name="voterId" required><br><br>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea><br><br>
+    <button type="submit">Save</button>
+  </form>
+
+  <form id="getForm">
+    <h2>Get Voter Description</h2>
+    <label for="searchVoterId">Voter ID:</label>
+    <input type="text" id="searchVoterId" name="voterId" required><br><br>
+    <button type="submit">Search</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    document.getElementById('saveForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const voterId = document.getElementById('voterId').value;
+      const description = document.getElementById('description').value;
+
+      const response = await fetch('/save-voter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voterId, description })
+      });
+
+      const result = await response.text();
+      document.getElementById('result').innerText = result;
+    });
+
+    document.getElementById('getForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const voterId = document.getElementById('searchVoterId').value;
+
+      const response = await fetch(`/get-description/${voterId}`);
+      const result = await response.text();
+      document.getElementById('result').innerText = result;
+    });
+  </script>
+</body>
+
+</html>

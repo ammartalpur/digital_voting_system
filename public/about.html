@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Card Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<style type="text/css">
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Jost', sans-serif;
+}
+body{
+  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+}
+h1 {
+    text-align: center;
+    color: #fff;
+    padding-top: 20px;
+    font-size: 2em;
+    font-size: 60px;
+}
+.container {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 40px auto;
+}
+.card {
+    width: 320px;
+    height: 500px;
+    background: transparent;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+.card:hover {
+    box-shadow: 0px 0px 20px 2px #c2bfbfa0;
+    transform: scale(1.05);
+    transition-duration: 1s;
+    background-color: #ffffffcc;
+
+}
+.bg {
+    width: 420px;
+    position: absolute;
+    top: 0;
+    left: -60px;
+    right: 20px;
+    opacity: 0.8;
+}
+.one {
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+    position: relative;
+    left: -40px;
+    z-index: 1;
+}
+.card:hover .bg {
+    transform: scale(1.1);
+    transition-duration: 1s;
+}
+.card h3 {
+    text-align: center;
+    color: #ffcc00;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1.4em;
+}
+.card h4 {
+    text-align: center;
+    color: grey;
+    font-weight: 500;
+    font-size: 1em;
+    margin-top: 10px;
+}
+.icon {
+    text-align: center;
+    margin-top: 20px;
+}
+.icon ion-icon {
+    font-size: 24px;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    background: #ffc400;
+    color: #fff;
+    border: 1px solid #ffc400;
+    opacity: 0;
+    margin: 5px;
+    transition: opacity 0.3s, background 0.3s;
+}
+.icon ion-icon:hover {
+    color: grey;
+    border: 1px solid grey;
+    background: transparent;
+}
+.card:hover .icon ion-icon {
+    opacity: 1;
+}
+.card:hover h3{
+    color: #000;
+}
+#line {
+    width: 50%;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 auto;
+}
+.about-us {
+  display: flex;
+  height: 60vh;
+  width: 100%;
+  padding: 90px 0;
+}
+
+.about {
+  width: 1130px;
+  max-width: 85%;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content:flex-start;
+}
+
+.text {
+  width: 100%;
+}
+
+.text h5 {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+span {
+  color: #ffcc00;
+}
+
+.text p {
+  color: #fff;
+  font-size: 24px;
+  line-height: 25px;
+  letter-spacing: 1px;
+}
+
+.data {
+  margin-top: 30px;
+  padding-top: 20px;
+}
+
+.hire {
+  font-size: 24px;
+  background: #ffcc00;
+  color: #000;
+  text-decoration: none;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 6px;
+  transition: 0.5s;
+}
+
+.hire:hover {
+  background: #f6ff00;
+  transform: translateY(-5px);
+}
+</style>
+<body>
+<header>
+<h1>Our Team</h1>
+<div class="container">
+    <div class="card">
+        <img class="bg" src="images/bg.png">
+        <img class="one" src="images/toufeeq.png">
+        <h3>Toufeeq Shaikh</h3>
+        <h4>Member</h4>
+        <div class="icon">
+           <a  href="https://wa.me/03033869307" target="_blank"><ion-icon name="logo-whatsapp"></ion-icon></a> 
+           <a href="https://www.instagram.com/toufeeq_shk?igsh=N2ZzNmp5bTZhY2Nv" target="_blank"><ion-icon name="logo-instagram"></ion-icon></a>
+           <a href="https://www.linkedin.com/in/toufeeq-shaikh-880019321" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+    </div>
+    <div class="card">
+        <img class="bg" src="images/bg.png">
+        <img class="one" src="images/ammar.png">
+        <h3>Ammar Talpur</h3>
+        <h4>Member</h4>
+        <div class="icon">
+            <a  href="https://wa.me/03220472570" target="_blank"><ion-icon name="logo-whatsapp"></ion-icon></a> 
+           <a href="https://www.instagram.com/meer._.ammar?igsh=MW8zdG1qbGl0MWJoNg==" target="_blank"><ion-icon name="logo-instagram"></ion-icon></a>
+           <a href="https://www.linkedin.com/in/ammar-talpur-6b77a327a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+    </div>
+    <div class="card">
+        <img class="bg" src="images/bg.png">
+        <img class="one" src="images/farhan.png">
+        <h3>Farhan Memon</h3>
+        <h4>Member</h4>
+        <div class="icon">
+            <a  href="https://wa.me/03377315237" target="_blank"><ion-icon name="logo-whatsapp"></ion-icon></a> 
+            <a href="https://www.instagram.com/alee_meymon1122?igsh=dnYwYzRwYmJzYmE=" target="_blank"><ion-icon name="logo-instagram"></ion-icon></a>
+            <a href="https://www.linkedin.com/in/farhan-alee-a123b2325?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+    </div>
+    <div class="card">
+        <img class="bg" src="images/bg.png">
+        <img class="one" src="images/hamza.png">
+        <h3>Hamza Baloch</h3>
+        <h4>Member</h4>
+        <div class="icon">
+            <a  href="https://wa.me/03022930102" target="_blank"><ion-icon name="logo-whatsapp"></ion-icon></a> 
+            <a href="https://www.instagram.com/baloch._.hamza166?igsh=bTR6dWs3ejF1dXc3" target="_blank"><ion-icon name="logo-instagram"></ion-icon></a>
+            <a href="https://www.linkedin.com/in/mir-hamza-b989ab328?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><ion-icon name="logo-linkedin"></ion-icon></a>
+        </div>
+    </div>
+</div>
+</header>
+<main>
+    <h1>About Our Project</h1>
+    <hr id="line">
+    <section class="about-us">
+      <div class="about">
+        <div class="text">
+          <h5><span>Digital</span> Voting System</h5>
+          <p>This Voting System Project is a C++ console application that simulates an election process, allowing admins to add candidates and users to cast votes. It displays real-time results, handles input validation, and provides a clean interface. The project demonstrates key programming concepts like dynamic memory allocation and control structures, offering a practical learning experience.</p>
+          <div class="data">
+            <a href="learnmore.html" class="hire">Learn More...</a>
+          </div>
+        </div>
+      </div>
+    </section>
+</main>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

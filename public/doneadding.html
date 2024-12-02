@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding Done</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Jost', sans-serif;
+            overflow: hidden;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            top: 0;
+            left: 0;
+        }
+        .container {
+            text-align: center;
+            z-index: 1;
+        }
+        .container h1{
+            color: #fff;
+        }
+        svg {
+            width: 1000px; 
+            height: 300px;
+            margin-left: 650px;
+            margin-bottom: 20px; 
+            margin-top: -600px;
+        }
+        .tick {
+            transform-origin: center;
+            animation: grow 1s ease-in-out forwards;
+        }
+        @keyframes grow {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .circle {
+            transform-origin: center;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+            animation: dash 1s linear;
+        }
+        @keyframes dash {
+            from {
+                stroke-dashoffset: 1000;
+                opacity: 0;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        h1 {
+            font-size: 2rem;
+            color: #222;
+        }
+        .back {
+            display: inline-block;
+            background: #ffcc00;
+            color: #000;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            transition: 0.5s;
+            margin-top: 4rem;
+            margin-left: -55px;
+        }
+        .back:hover {
+            background: #f6ff00;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div> 
+    <div class="container">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+            <path class="circle" stroke="#019d33" stroke-width="10" fill="#fff" fill-opacity="0" stroke-miterlimit="10" d="M150,47.9c18.4,0,35.4,4.6,51,13.8s28,21.6,37.2,37.2s13.8,32.6,13.8,51s-4.6,35.4-13.8,51s-21.6,28-37.2,37.2
+                s-32.6,13.8-51,13.8s-35.4-4.6-51-13.8s-28-21.6-37.2-37.2s-13.8-32.6-13.8-51s4.6-35.4,13.8-51s21.6-28,37.2-37.2
+                S131.7,47.9,150,47.9z M150,238.7c16.2,0,31-4,"/>
+            <path class="tick" cx="0" cy="0" r="1" opacity="1" fill="#1C9943" stroke="" stroke-width="10" d="M208.4,118.6c0.8-0.8,1.2-1.9,1.2-3.3c0-1.4-0.4-2.6-1.2-3.7l-3.7-3.3c-0.8-1.1-1.9-1.6-3.3-1.6
+                s-2.6,0.4-3.7,1.2l-67,67l-28.4-28.8c-1.1-0.8-2.3-1.2-3.7-1.2c-1.4,0-2.5,0.4-3.3,1.2l-3.7,3.3c-0.8,1.1-1.2,2.3-1.2,3.7
+                s0.4,2.5,1.2,3.3l35.4,35.8c1.1,1.1,2.3,1.6,3.7,1.6c1.4,0,2.5-0.5,3.3-1.6L208.4,118.6z"/>
+        </svg>
+        <h1>All the Candidates have been Added.</h1>
+        <a href="/" class="back">Back To Home</a>
+    </div>
+    <audio autoplay>
+        <source src="audio.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script src="cpp/particles.js"></script>
+<script>
+    // Initialize the WebAssembly module
+    createModule().then(Module => {
+        if (Module.getParticleConfig) {
+            const config = Module.getParticleConfig();
+
+            // Convert the config to the format expected by particles.js
+            const particlesConfig = {
+                particles: {
+                    number: { value: config.number_value, density: { enable: config.density_enable, value_area: config.density_value_area } },
+                    color: { value: config.color_value },
+                    shape: { type: config.shape_type },
+                    opacity: { value: config.opacity_value, anim: { enable: config.opacity_anim_enable, speed: config.opacity_anim_speed, opacity_min: config.opacity_anim_opacity_min, sync: config.opacity_anim_sync } },
+                    size: { value: config.size_value, random: config.size_random, anim: { enable: config.size_anim_enable, speed: config.size_anim_speed, size_min: config.size_anim_size_min, sync: config.size_anim_sync } },
+                    line_linked: { enable: config.line_linked_enable, distance: config.line_linked_distance, color: config.line_linked_color, opacity: config.line_linked_opacity, width: config.line_linked_width },
+                    move: { enable: config.move_enable, speed: config.move_speed, direction: config.move_direction, out_mode: config.move_out_mode, bounce: config.move_bounce }
+                },
+                interactivity: {
+                    events: { onhover: { enable: config.interactivity_onhover_enable, mode: config.interactivity_onhover_mode }, onclick: { enable: config.interactivity_onclick_enable, mode: config.interactivity_onclick_mode } }
+                },
+                retina_detect: config.retina_detect
+            };
+
+            // Initialize particles.js with the configuration
+            particlesJS("particles-js", particlesConfig);
+        } else {
+            console.error("getParticleConfig function not found in the WebAssembly module.");
+        }
+    }).catch(error => {
+        console.error("Error initializing the WebAssembly module:", error);
+    });
+</script>
+
+</body>
+</html>

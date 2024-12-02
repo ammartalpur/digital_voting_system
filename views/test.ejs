@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Voting System</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+        margin: 0;
+        padding: 0;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        position: relative;
+      }
+      .container {
+        max-width: 800px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        padding: 30px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .header h1 {
+        font-size: 2rem;
+        color: #203a43;
+        margin: 0;
+      }
+      .candidate-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-height: 400px; /* Set maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding: 10px; /* Add some padding for aesthetics */
+        border: 1px solid #ddd; /* Add a border for better visibility */
+        border-radius: 12px; /* Match the card's border radius */
+      }
+      .candidate-card {
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .candidate-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .candidate-card h2 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 15px;
+      }
+      .vote-btn {
+        padding: 12px 20px;
+        background-color: #ffcc00;
+        color: #000;
+        border: none;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      .vote-btn:hover {
+        background-color: #ecbd04;
+        transform: scale(1.05);
+      }
+      .countdown-timer {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.85);
+        color: #333;
+        padding: 20px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        border: 2px solid #1e90ff;
+      }
+      #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="particles-js"></div>
+    <div class="container">
+      <div class="header">
+        <h1>Digital Voting System</h1>
+      </div>
+      <div class="candidate-list">
+        <% candidates.forEach(candidate => { %>
+        <div class="candidate-card">
+          <h2><%= candidate.name %></h2>
+          <form action="/vote" method="POST">
+            <input
+              type="hidden"
+              name="candidateId"
+              value="<%= candidate.id %>"
+            />
+            <input type="hidden" name="voterId" value="<%= faceid %>" />
+            <button type="submit" class="vote-btn">Vote</button>
+          </form>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <div class="countdown-timer" id="timer">30</div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="cpp/particles.js"></script>
+    <script src="js/timer.js"></script>
+  </body>
+</html>

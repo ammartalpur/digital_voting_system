@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Voting System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(120deg, #2c5364, #203a43, #0f2027);
+      }
+
+      .admin-panel {
+        background-color: #ffffff;
+        padding: 4rem;
+        width: 100%;
+        max-width: 1000px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .admin-panel h1 {
+        font-size: 3rem;
+        color: #333;
+        margin-bottom: 2rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.2rem;
+        text-align: left;
+      }
+
+      .form-group label {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.3rem;
+        display: block;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+        transition: border 0.3s;
+      }
+
+      .form-group input:focus {
+        border-color: #4d79ff;
+      }
+
+      .next {
+        display: inline-block;
+        font-size: 1.5rem;
+        background: #ffcc00;
+        color: #000;
+        text-decoration: none;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 6px;
+        transition: 0.5s;
+        margin-top: 2rem;
+      }
+      .next:hover {
+        background: #f6ff00;
+        transform: translateY(-5px);
+      }
+
+      .camera-container {
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .camera-box {
+        width: 640px;
+        height: 480px;
+        border: 5px solid rgb(255, 255, 255);
+        border-radius: 10px;
+        background-color: transparent;
+        margin: 0 auto;
+        margin-left: 10px;
+      }
+
+      .verify {
+        display: inline-block;
+        font-size: 1.5rem;
+        background: #ffcc00;
+        color: #000;
+        text-decoration: none;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 6px;
+        transition: 0.5s;
+        margin-top: 1rem;
+      }
+      .verify:hover {
+        background: #f6ff00;
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="admin-panel">
+      <h1>Roll Number</h1>
+
+      <div class="form-group">
+        <label for="candidateName"><h3>Enter Roll No:</h3></label>
+        <input type="text" id="candidateName" placeholder="Your Roll Number" />
+      </div>
+
+      <button class="next" id="start-camera">Next...</button>
+    </div>
+
+    <div class="camera-container" style="display: none; flex-direction: column">
+      <div class="camera-box">
+        <video
+          id="webcam"
+          autoplay
+          muted
+          playsinline
+          width="640"
+          height="480"
+        ></video>
+        <canvas
+          id="overlay"
+          width="640"
+          height="480"
+          style="position: absolute; top: 0; left: 0"
+        ></canvas>
+      </div>
+      <button class="verify" id="verify-face">Verify</button>
+    </div>
+    <script src="/face-api.min.js"></script>
+    <script>
+      const video = document.getElementById("webcam");
+      const canvas = document.getElementById("overlay");
+
+      // Detection options
+      const tinyFaceDetectorOptions = new faceapi.TinyFaceDetectorOptions({
+        inputSize: 320,
+        scoreThreshold: 0.5,
+      });
+
+      const ssdMobilenetOptions = new faceapi.SsdMobilenetv1Options({
+        minConfidence: 0.5,
+      });
+
+      // Initialize webcam
+      async function startWebcam() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { width: 640, height: 480 },
+          });
+          video.srcObject = stream;
+          console.log("Webcam started successfully.");
+        } catch (error) {
+          console.error("Error starting webcam:", error);
+          alert("Could not access the webcam. Please check permissions.");
+        }
+      }
+
+      // Load models
+      async function loadModels() {
+        try {
+          console.log("Loading models...");
+          await faceapi.nets.tinyFaceDetector.loadFromUri("./models");
+          await faceapi.nets.faceLandmark68Net.loadFromUri("./models");
+          await faceapi.nets.faceRecognitionNet.loadFromUri("./models");
+          await faceapi.nets.ssdMobilenetv1.loadFromUri("./models");
+          console.log("Models loaded successfully.");
+          status.textContent = "Models loaded!";
+        } catch (error) {
+          console.error("Error loading models:", error);
+          status.textContent = "Error loading models.";
+        }
+      }
+      loadModels();
+      // Detect face using TinyFaceDetector
+      async function detectFaceTiny(video) {
+        try {
+          return await faceapi
+            .detectSingleFace(video, tinyFaceDetectorOptions)
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+        } catch (error) {
+          console.error("Error with TinyFaceDetector:", error);
+          return null;
+        }
+      }
+
+      // Detect face using SSD Mobilenet
+      async function detectFaceSSD(video) {
+        try {
+          return await faceapi
+            .detectSingleFace(video, ssdMobilenetOptions)
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+        } catch (error) {
+          console.error("Error with SSD Mobilenet:", error);
+          return null;
+        }
+      }
+
+      // Sequential verification with fallback
+      async function detectFaceSequentially(video) {
+        let detection = await detectFaceTiny(video);
+
+        if (!detection) {
+          console.log("TinyFaceDetector failed. Trying SSD Mobilenet...");
+          detection = await detectFaceSSD(video);
+        }
+
+        if (!detection) {
+          console.log("Both models failed to detect a face.");
+        }
+
+        return detection;
+      }
+
+      document
+        .getElementById("start-camera")
+        .addEventListener("click", async () => {
+          const rollNumber = document.getElementById("candidateName").value;
+          const response = await fetch(
+            `/getfacedescriptor?rollNumber=${rollNumber}`
+          );
+          const data = await response.json();
+
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+
+          document.querySelector(".camera-container").style.display = "flex";
+          await startWebcam();
+        });
+
+      // Verify face
+      async function verifyFace() {
+        const rollNumber = document.getElementById("candidateName").value;
+        const video = document.getElementById("webcam");
+        const detections = await detectFaceSequentially(video);
+
+        if (!detections) {
+          alert("No face detected in the webcam!");
+          return;
+        }
+
+        const faceDescriptor = detections.descriptor;
+        const faceDescriptorString = JSON.stringify(faceDescriptor);
+
+        // Fetch the face descriptor from the server
+        const response = await fetch(
+          `/getfacedescriptor?rollNumber=${rollNumber}`
+        );
+        const data = await response.json();
+
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        const storedDescriptor = new Float32Array(
+          Object.values(data.facedescriptor)
+        );
+        const distance = faceapi.euclideanDistance(
+          faceDescriptor,
+          storedDescriptor
+        );
+
+        const threshold = 0.35; // Strict threshold
+        if (distance < threshold) {
+          alert("Face verified successfully!");
+          window.location.href = `/uservoting?faceid=${rollNumber}`;
+        } else {
+          alert("Face verification failed!");
+        }
+      }
+
+      document
+        .getElementById("verify-face")
+        .addEventListener("click", verifyFace);
+    </script>
+  </body>
+</html>
